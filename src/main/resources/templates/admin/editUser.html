@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit user</title>
+</head>
+<body>
+<form th:action="@{/admin/user/{id}(id=${user.getId()})}" th:method="PATCH" th:object="${user}">
+
+    <label for="username">Username: </label>
+    <input id="username" th:field="*{username}" type="text" th:required="true"/><br>
+    <label for="password">Password: </label>
+    <input id="password" th:field="*{password}" type="password" /><br>
+    <br><br>
+    <label for="name">Name: </label>
+    <input id="name" th:field="*{firstName}" type="text" th:required="true"/><br>
+    <label for="surname">Lastname: </label>
+    <input id="surname" th:field="*{lastName}" type="text" th:required="true"/><br>
+    <label for="age">Age: </label>
+    <input id="age" th:field="*{age}" type="text" th:required="true"/><br>
+    <br><br>
+
+    <label>Roles:
+        <input type="checkbox" name="rolesIdSelect"
+               th:each="role : ${roleList}"
+               th:value="${role.id}"
+               th:text="${role.name}"
+        />
+    </label>
+
+    <br><br>
+    <input type="submit" value="Edit"/>
+
+</form>
+<br><br>
+<form method="GET" action="/admin">
+    <input type="submit" value="To table">
+</form>
+<br><br>
+<form method="GET" action="/logout">
+    <input type="submit" value="Logout">
+</form>
+
+</body>
+</html>
