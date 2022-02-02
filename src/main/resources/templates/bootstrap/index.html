@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Untitled (Backup 1643743123508)</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+<!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+</head>
+
+<body>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
+    <div>
+        <nav class="navbar navbar-dark bg-dark">
+            <a class="navbar-brand" href="#">
+                <strong><span th:text="${user.username}"></span></strong> with roles: <span
+                    th:text="${user.getAllRoles()}"></span></a>
+            <a class="nav-link text-secondary " href="/logout"><h6>Logout</h6></a>
+        </nav>
+
+        <div class="container-fluid">
+            <div class="row justify-content-md-center">
+                <div class="col-lg-2">
+                        <form action="/bootstrap/index" method="GET">
+                            <button class="btn btn-primary btn-lg btn-block" style="text-align: left" type="submit">Admin</button>
+                        </form>
+                        <form action="/bootstrap/user" method="GET">
+                            <button class="btn btn-link btn-lg btn-block" style="text-align: left" type="submit">User</button>
+                        </form>
+                </div>
+                <div class="col-lg-10 gray tab-content">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Admin Panel</h5>
+                        </div>
+                        <div class="card-body" style="background-color: rgba(0,0,0,0.03);">
+                            <div>
+                                <ul class="nav nav-tabs">
+                                    <li class="nav-item"><a class="nav-link active" role="tab" data-toggle="tab" href="#tab-1">Users table</a></li>
+                                    <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" href="#tab-2">New user</a></li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane active" role="tabpanel" id="tab-1">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h5 class="mb-0">All users</h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="table-responsive" title="dsad">
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>ID</th>
+                                                                <th>First Name</th>
+                                                                <th>Last Name</th>
+                                                                <th>Age</th>
+                                                                <th>Email</th>
+                                                                <th>Role</th>
+                                                                <th>Edite</th>
+                                                                <th>Delete</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr th:each="user:${userList}">
+                                                                <td th:text="${user.id}"></td>
+                                                                <td th:text="${user.firstName}"></td>
+                                                                <td th:text="${user.lastName}"></td>
+                                                                <td th:text="${user.age}"></td>
+                                                                <td th:text="${user.username}"></td>
+                                                                <td th:text="${user.getAllRoles()}"></td>
+                                                                <td><button class="btn btn-primary" type="button" style="background-color: rgb(20,213,213);" th:attr="data-target=${'#modal-edite'+user.getId()}" data-toggle="modal">Edite</button></td>
+
+                                                                <!--    модальное окно "изменить"-->
+                                                                <div class="modal fade" th:attr="id=${'modal-edite'+ user.getId()}" role="dialog" tabindex="-1" id="modal-edite">
+                                                                    <div class="modal-dialog" role="document" >
+                                                                        <div class="modal-content">
+                                                                            <div class="modal-header">
+                                                                                <h4 class="modal-title">Edite user</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+                                                                            <div class="modal-body text-center">
+                                                                                <form class="text-center d-inline-block" method="post" th:action="@{/bootstrap/edite}">
+                                                                                    <div class="form-group text-center"><label class="text-center" style="font-size: 18px;filter: hue-rotate(0deg);font-weight: bold;">Id</label><input class="form-control" type="number" readonly name="Id" th:value="${user.id}"></div>
+                                                                                    <div class="form-group text-center"><label class="text-center" style="font-size: 18px;filter: hue-rotate(0deg);font-weight: bold;">First name</label><input class="form-control" type="text" required="" minlength="2" maxlength="17" name="FirstName" th:value="${user.firstName}"></div>
+                                                                                    <div class="form-group text-center"><label class="text-center" style="font-size: 18px;filter: hue-rotate(0deg);font-weight: bold;">Last name</label><input class="form-control" type="text" required="" minlength="2" maxlength="17" name="LastName" th:value="${user.lastName}" ></div>
+                                                                                    <div class="form-group text-center"><label class="text-center" style="font-size: 18px;filter: hue-rotate(0deg);font-weight: bold;">Age</label><input class="form-control" type="number" min="1" max="150" step="1" name="Age" th:value="${user.age}" ></div>
+                                                                                    <div class="form-group text-center"><label class="text-center" style="font-size: 18px;filter: hue-rotate(0deg);font-weight: bold;">Email</label><input class="form-control" type="email" name="Email" th:value="${user.username}" ></div>
+                                                                                    <div class="form-group text-center"><label class="text-center" style="font-size: 18px;filter: hue-rotate(0deg);font-weight: bold;">Password</label><input class="form-control" type="password" name="Password" th:value="${user.password}" ></div>
+                                                                                    <div class="form-group text-center"><label class="text-center" style="font-size: 18px;filter: hue-rotate(0deg);font-weight: bold;">Role</label><select class="form-control" multiple="multiple" required="" name="nameRoles"><option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.name}" th:selected="${role.name} == ${user.getAllRoles()}"></option></select></div>
+                                                                            <div class="modal-footer">
+                                                                                <input type="button" class="btn btn-secondary closeButton"
+                                                                                       data-dismiss="modal" value="Close">
+                                                                                <input type="submit" class="btn btn-primary" value="Edit"
+                                                                                       id="updateButton">
+                                                                            </div>
+                                                                            </form>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <td><button class="btn btn-primary" type="button" style="background-color: rgb(203,7,66);" th:attr="data-target=${'#modal-delete'+user.getId()}" data-toggle="modal">Delete</button></td>
+                                                                <!--    модальное окно "удалить"-->
+                                                                <div class="modal fade" th:attr="id=${'modal-delete'+ user.getId()}" role="dialog" tabindex="-1" id="modal-delete">
+                                                                    <div class="modal-dialog" role="document">
+                                                                        <div class="modal-content">
+                                                                            <div class="modal-header">
+                                                                                <h4 class="modal-title">Edite user</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+                                                                            <div class="modal-body text-center">
+                                                                                <form class="text-center d-inline-block" method="post" th:action="@{/bootstrap/delete}">
+                                                                                    <div class="form-group text-center"><label class="text-center" style="font-size: 18px;filter: hue-rotate(0deg);font-weight: bold;">Id</label><input class="form-control" type="number" name="Id" readonly th:value="${user.id}"></div>
+                                                                                    <div class="form-group text-center"><label class="text-center" style="font-size: 18px;filter: hue-rotate(0deg);font-weight: bold;">First name</label><input class="form-control" type="text" readonly th:value="${user.firstName}"></div>
+                                                                                    <div class="form-group text-center"><label class="text-center" style="font-size: 18px;filter: hue-rotate(0deg);font-weight: bold;">Last name</label><input class="form-control" type="text" readonly th:value="${user.lastName}"></div>
+                                                                                    <div class="form-group text-center"><label class="text-center" style="font-size: 18px;filter: hue-rotate(0deg);font-weight: bold;">Age</label><input class="form-control" type="number" readonly th:value="${user.age}"></div>
+                                                                                    <div class="form-group text-center"><label class="text-center" style="font-size: 18px;filter: hue-rotate(0deg);font-weight: bold;">Email</label><input class="form-control" type="email" readonly th:value="${user.username}"></div>
+                                                                                    <div class="form-group text-center"><label class="text-center" style="font-size: 18px;filter: hue-rotate(0deg);font-weight: bold;">Password</label><input class="form-control" type="password" readonly th:value="${user.password}"></div>
+                                                                                    <div class="form-group text-center"><label class="text-center" style="font-size: 18px;filter: hue-rotate(0deg);font-weight: bold;">Role</label><select class="form-control" multiple="multiple" required="" name="nameRoles" readonly><option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.name}" th:selected="${role.name} == ${user.getAllRoles()}"></option></select></div>
+                                                                                    <div class="modal-footer">
+                                                                                        <input type="button" class="btn btn-secondary closeButton"
+                                                                                               data-dismiss="modal" value="Close">
+                                                                                        <input type="submit" class="btn btn-primary" value="Delete"
+                                                                                               id="deleteButton">
+                                                                                    </div>
+                                                                                </form>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+<!--                                    добавление нового пользователя-->
+                                    <div class="tab-pane text-center" role="tabpanel" id="tab-2" style="background-color: rgb(255,255,255);">
+                                        <div class="card">
+                                            <div class="card-header text-left">
+                                                <h5 class="mb-0">Add new user</h5>
+                                            </div>
+                                        </div>
+                                        <form class="text-center d-inline-block" method="post" th:action="@{/bootstrap/add}">
+                                            <div class="form-group text-center"><label class="text-center" style="font-size: 18px;filter: hue-rotate(0deg);font-weight: bold;">First name</label><input class="form-control" type="text" required="" minlength="2" maxlength="17" placeholder="FirstName" name="FirstName"></div>
+                                            <div class="form-group text-center"><label class="text-center" style="font-size: 18px;filter: hue-rotate(0deg);font-weight: bold;">Last name</label><input class="form-control" type="text" required="" minlength="2" maxlength="17" placeholder="LastName" name="LastName"></div>
+                                            <div class="form-group text-center"><label class="text-center" style="font-size: 18px;filter: hue-rotate(0deg);font-weight: bold;">Age</label><input class="form-control" type="number" min="1" max="150" step="1" placeholder="Age" name="Age"></div>
+                                            <div class="form-group text-center"><label class="text-center" style="font-size: 18px;filter: hue-rotate(0deg);font-weight: bold;">Email</label><input class="form-control" type="email" placeholder="Email" name="Email"></div>
+                                            <div class="form-group text-center"><label class="text-center" style="font-size: 18px;filter: hue-rotate(0deg);font-weight: bold;">Password</label><input class="form-control" type="password" placeholder="Password" name="Password"></div>
+                                            <div class="form-group text-center"><label class="text-center" style="font-size: 18px;filter: hue-rotate(0deg);font-weight: bold;">Role</label><select class="form-control" multiple="multiple" required="" name="nameRoles"><option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.name}" th:selected="${role.name} == ROLE_USER"></option></select></div>
+
+                                            <button
+                                                class="btn btn-primary" type="submit" style="background-color: rgb(37,166,49);">Add new user</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+</body>
+
+</html>

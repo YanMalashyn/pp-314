@@ -52,15 +52,6 @@ public class UserServiceImp implements UserService {
         Set<Role> roleSet = new HashSet<>();
         roleSet.add(roleService.getRoleById(idRole));
         user.setRoles(roleSet);
-//
-//        User userToUpdate = userRepository.getById(user.getId());
-//        userToUpdate.setUsername(user.getUsername());
-//        userToUpdate.setPassword(user.getPassword());
-//        userToUpdate.setFirstName(user.getFirstName());
-//        userToUpdate.setLastName((user.getLastName()));
-//        userToUpdate.setAge(user.getAge());
-//        userToUpdate.setRoles(user.getRoles());
-
         userRepository.save(user);
 
     }
