@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -27,11 +28,8 @@ public class UserServiceImp implements UserService {
 
 
     @Override
-    public void saveUser(User user, Long id) {
+    public void saveUser(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        Set<Role> roleSet = new HashSet<>();
-        roleSet.add(roleService.getRoleById(id));
-        user.setRoles(roleSet);
         userRepository.save(user);
 
     }
@@ -43,17 +41,20 @@ public class UserServiceImp implements UserService {
 
     @Override
     public User getUserById(Long id) {
-        return userRepository.getById(id);
+        User user = null;
+        Optional<User> optional = userRepository.findById(id);
+        if (optional.isPresent()) {
+            user = optional.get();
+        }
+        return user;
     }
 
     @Override
-    public void updateUser(Long id, User user, Long idRole) {
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        Set<Role> roleSet = new HashSet<>();
-        roleSet.add(roleService.getRoleById(idRole));
-        user.setRoles(roleSet);
+    public void updateUser(User user) {
+        if(!userRepository.getById(user.getId()).getPassword().equals(user.getPassword())){
+            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        }
         userRepository.save(user);
-
     }
 
     @Override

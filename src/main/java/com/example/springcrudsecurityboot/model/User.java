@@ -1,11 +1,11 @@
 package com.example.springcrudsecurityboot.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.Hibernate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Set;
@@ -18,22 +18,18 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-   // @NotBlank(message = "field must be required")
     @Column
     private String firstName;
 
-   // @NotBlank (message = "field must be required")
     @Column
     private String lastName;
 
     @Column
     private int age;
 
-   // @NotBlank (message = "field must be required")
     @Column
     private String username;
 
-   // @NotBlank (message = "field must be required")
     @Column
     private String password;
 
